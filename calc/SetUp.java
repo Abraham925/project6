@@ -1,5 +1,7 @@
 package calc;
 
+import java.awt.event.ActionListener;
+
 /**
  * SetUp
  * 
@@ -20,14 +22,26 @@ public class SetUp {
 	 */
 	public static void setUpCalculator(CalculatorFace face) {
 
-		// delete this line.
+		CalcStorage storage = new CalcStorage();
 		face.writeToScreen("hello");
 		
+		for(int i = 0; i<10; i++) {
+			face.addNumberActionListener(i, new numberListener(face, i, storage));
+		}
 		
-		// add code here that will have the effect of connecting
-		// the given face to your calculator
+		face.addPlusMinusActionListener(new PlusMinusListener(face, storage));
 		
-		
+		char[] opArray = new char[7];
+		opArray[0] = '.';
+		opArray[1] = '+';
+		opArray[2] = '-';
+		opArray[3] = '*';
+		opArray[4] = '/';
+		opArray[5] = '=';
+		opArray[6] = 'C';
+		for(int i = 0; i<opArray.length; i++) {
+			face.addActionListener(opArray[i], (ActionListener) new OperatorListener(face, opArray[i], storage));
+		}
 	}
 	
 	
