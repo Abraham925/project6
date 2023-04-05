@@ -1,6 +1,5 @@
 package calc;
 
-import java.awt.event.ActionListener;
 
 /**
  * SetUp
@@ -8,9 +7,9 @@ import java.awt.event.ActionListener;
  * Class to set up and start the calculator, plus
  * facilities for test-driving the calculator.
  *
- * @author Thomas VanDrunen
+ * @author Abraham Austin
  * CS 245, Wheaton College
- * June 27, 2014
+ * April 4, 2023
 */
 public class SetUp {
 
@@ -23,7 +22,6 @@ public class SetUp {
 	public static void setUpCalculator(CalculatorFace face) {
 
 		CalcStorage storage = new CalcStorage();
-		face.writeToScreen("hello");
 		
 		for(int i = 0; i<10; i++) {
 			face.addNumberActionListener(i, new numberListener(face, i, storage));
@@ -40,7 +38,7 @@ public class SetUp {
 		opArray[5] = '=';
 		opArray[6] = 'C';
 		for(int i = 0; i<opArray.length; i++) {
-			face.addActionListener(opArray[i], (ActionListener) new OperatorListener(face, opArray[i], storage));
+			face.addActionListener(opArray[i], new OperatorListener(face, opArray[i], storage));
 		}
 	}
 	

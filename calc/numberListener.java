@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
  *
  * @author Abraham Austin
  * CS 245, Wheaton College
- * Feb 13, 2023
+ * April 4, 2023
 */
 
 public class numberListener implements ActionListener {
@@ -28,8 +28,7 @@ public class numberListener implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		storage.addNumber(x);
-
+		storage.addNumber(x, face);
 	}
 
 }

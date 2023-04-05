@@ -1,8 +1,9 @@
 package calc;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class OperatorListener {
+public class OperatorListener implements ActionListener{
 	CalculatorFace face;
 	CalcStorage storage;
 	char x;
@@ -13,6 +14,6 @@ public class OperatorListener {
 		this.x = x;
 	}
 	public void actionPerformed(ActionEvent e) {
-		storage.addOp(x);
+		storage.addOp(String.valueOf(x), face);
 	}
 }
