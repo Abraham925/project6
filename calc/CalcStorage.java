@@ -1,30 +1,53 @@
 package calc;
 
 import java.util.Stack;
-
+/**
+ * Calc Storage
+ * does all the calculations
+ * 
+ *
+ * @author Abraham Austin
+ * CS 245, Wheaton College
+ * April 4, 2023
+*/
 public class CalcStorage {
-    Stack<Integer> calc = new Stack<Integer>();
-    private StringBuilder screen;
-    private StringBuilder currentNumber;
+    Stack<Integer> calc = new Stack<Integer>();//stack to hold the integers
+    private StringBuilder screen;// StringBuilder to hold the screen input
+    private StringBuilder currentNumber;//StringBuilder to hold the current number
 
+    /**
+     * 
+     * Constructor initializes the screen and currentNumnber
+     */
     public CalcStorage() {
         screen = new StringBuilder();
         currentNumber = new StringBuilder();
     }
 
+    /**
+     * writes the number on the calculator screen and saves it in addNumber
+     * @param x - number
+     * @param face
+     */
     public void addNumber(int x, CalculatorFace face) {
         currentNumber.append(x);
         screen.append(x);
         face.writeToScreen(screen.toString());
     }
-
+    /**
+     * pushes the number to the stack
+     */
     private void processNumber() {
         if (currentNumber.length() > 0) {
             calc.push(Integer.parseInt(currentNumber.toString()));
             currentNumber.setLength(0);
         }
     }
-
+    /**
+     * Calculates the numbers in the stack based on the given operator
+     * @param x - operator
+     * @param face
+     */
     public void addOp(String x, CalculatorFace face) {
     	if(calc.size() >= 1) {
     		processNumber();
@@ -84,7 +107,10 @@ public class CalcStorage {
     }
 
 
-    
+    /**
+     * toggles the plus or minus
+     * @param face
+     */
     public void togglePlusMinus(CalculatorFace face) {
         if (currentNumber.length() > 0) {
             int currentValue = Integer.parseInt(currentNumber.toString()) * -1;

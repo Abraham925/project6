@@ -2,7 +2,16 @@ package calc;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/**
+ * OperatorListener 
+ * calls the addOp function in CalcStorage
+ * 
+ * class to add actions to the numbers
+ *
+ * @author Abraham Austin
+ * CS 245, Wheaton College
+ * April 4, 2023
+*/
 public class OperatorListener implements ActionListener{
 	CalculatorFace face;
 	CalcStorage storage;
