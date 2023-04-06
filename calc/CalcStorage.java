@@ -1,107 +1,110 @@
 package calc;
 
-
-/**
- * CalcStorage
- * 
- * Acts as a storage for the numbers and operator values
- *
- * @author Abraham Austin
- * CS 245, Wheaton College
- * Feb 13, 2023
-*/
+import java.util.Stack;
 
 public class CalcStorage {
-	ListStack<String> calc = new ListStack<String>();
-	private boolean neg;
-	private int op1;
-	private int op2;
-	private String screen; 
-	
-	public CalcStorage() {
-		neg = false;
-		op1 = 0;
-		op2 = 0;
-		screen = "";
-	}
-	
-	public int saveOperand() {
-		String operand1 = "";
-	//need to check if the the operand is an integer or not
-		while(!calc.empty()) {
-			operand1 = String.valueOf(calc.top()) + operand1;
-			calc.pop();
-		}
-		return Integer.parseInt(operand1);
-	}
-	
+    Stack<Integer> calc = new Stack<Integer>();
+    private StringBuilder screen;
+    private StringBuilder currentNumber;
 
-	public void addNumber(int x, CalculatorFace face) {
-		for(int i=0; i<10;i++) {
-			if(i==x) {
-				
-				calc.push(String.valueOf(x));
-				screen += String.valueOf(x);
-				face.writeToScreen(screen);
-			}
-		}
+    public CalcStorage() {
+        screen = new StringBuilder();
+        currentNumber = new StringBuilder();
+    }
 
-	}
-	public void addOp(String x, CalculatorFace face) {
-		screen+= x;
-		face.writeToScreen(screen);
-		switch(x) {
-			case("C"):
-				face.writeToScreen("");
-				while(!calc.empty()) {
-					calc.pop();
-				}; 
-				op1 = 0;
-				op2 = 0;
-				screen = "";break;
-			case("."): op1 = saveOperand(); 
-						face.writeToScreen("");
-						break;
-			case("+"): op2 = saveOperand();
-						op1 = op1 + op2;
-						screen = String.valueOf(op1);
-						face.writeToScreen(screen);
-					   op2 = 0;break;
-			case("-"): op2 = saveOperand();
-						op1 = op1 - op2;
-						screen = String.valueOf(op1);
-						face.writeToScreen(screen);
-			   			op2 = 0;break;
-			case("*"): op2 = saveOperand();
-						op1 = op1 * op2;
-						screen = String.valueOf(op1);
-						face.writeToScreen(screen);
-			   			op2 = 0;break;
-			case("/"): 
-			op2 = saveOperand();
-			if(op2!=0) {
-					op1 = op1/op2;
-					screen = String.valueOf(op1);
-					face.writeToScreen(screen);
-				   op2 = 0;break;
-			}break;
-			case("="):face.writeToScreen(calc.top());
-				      calc.pop();break;
-		}
-		
-		
-		
-	}
-	
-	public void setNeg() {
-		if(neg == true) {
-			neg = false;
-		}
-		else {
-			neg = true;
-		}
-	}
-	public boolean neg() {
-		return neg;
-	}
+    public void addNumber(int x, CalculatorFace face) {
+        currentNumber.append(x);
+        screen.append(x);
+        face.writeToScreen(screen.toString());
+    }
+
+    private void processNumber() {
+        if (currentNumber.length() > 0) {
+            calc.push(Integer.parseInt(currentNumber.toString()));
+            currentNumber.setLength(0);
+        }
+    }
+
+    public void addOp(String x, CalculatorFace face) {
+    	if(calc.size() >= 1) {
+    		processNumber();
+    	}
+    	
+    	
+        switch (x) {
+            case "C":
+                face.writeToScreen("");
+                calc = new Stack<Integer>();
+                screen.setLength(0);
+                currentNumber.setLength(0);
+                break;
+            case ".":
+            	processNumber();
+            	screen.setLength(0);
+                face.writeToScreen(screen.toString());
+                break;
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+                if (calc.size() >= 2) {
+                    int op2 = calc.pop();
+                    int op1 = calc.pop();
+                    int result = 0;
+                    switch (x) {
+                        case "+":
+                            result = op1 + op2;
+                            break;
+                        case "-":
+                            result = op1 - op2;
+                            break;
+                        case "*":
+                            result = op1 * op2;
+                            break;
+                        case "/":
+                            if (op2 != 0) {
+                                result = op1 / op2;
+                            }
+                            break;
+                    }
+                    calc.push(result);
+                    screen.setLength(0);
+                    screen.append(result);
+                    face.writeToScreen(screen.toString());
+                }//else if(Integer.parseInt(currentNumber.toString()) == 1) {
+                	
+                //}
+                break;
+            case "=":
+                if (!calc.empty()) {
+                    face.writeToScreen(String.valueOf(calc.peek()));
+                }
+                break;
+        }
+    }
+
+
+    
+    public void togglePlusMinus(CalculatorFace face) {
+        if (currentNumber.length() > 0) {
+            int currentValue = Integer.parseInt(currentNumber.toString()) * -1;
+            currentNumber.setLength(0);
+            currentNumber.append(currentValue);
+            processNumber();
+            screen.setLength(0);
+            screen.append(currentValue);
+            face.writeToScreen(screen.toString());
+            screen.setLength(0);
+        }
+        else if(calc.size() ==1){
+        	int currentValue = calc.pop();
+        	currentValue = currentValue * -1;
+        	calc.push(currentValue);
+        	screen.setLength(0);
+            screen.append(currentValue);
+            face.writeToScreen(screen.toString());
+
+        }
+    }
 }
+
